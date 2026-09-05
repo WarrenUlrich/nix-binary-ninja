@@ -115,11 +115,15 @@ stdenv.mkDerivation {
     addAutoPatchelfSearchPath "$out/opt/binaryninja/python3/shiboken6"
 
     cp ${desktopIcon} $out/share/pixmaps/binaryninja.png
+    ln -s ${lib.getLib curl}/lib/libcurl.so.4 $out/opt/binaryninja/libcurl.so
     chmod +x $out/opt/binaryninja/binaryninja
     buildPythonPath "$pythonDeps"
     makeWrapper $out/opt/binaryninja/binaryninja $out/bin/binaryninja \
       --prefix PYTHONPATH : "$program_PYTHONPATH" \
-      ${lib.optionalString forceWayland "--set QT_QPA_PLATFORM wayland"}
+      --unset QT_PLUGIN_PATH \
+      --unset QML2_IMPORT_PATH \
+      --set QT_QPA_PLATFORM_PLUGIN_PATH "$out/opt/binaryninja/qt/platforms" \
+      --set QT_QPA_PLATFORM "${if forceWayland then "wayland" else "xcb"}"
     runHook postInstall
   '';
   preFixup = ''

@@ -19,6 +19,8 @@
   dbus,
   libxkbcommon,
   wayland,
+  libdrm,
+  sqlite,
   python3,
   libxml2,
   xcbutilwm,
@@ -66,6 +68,8 @@ stdenv.mkDerivation {
     libxkbcommon
     dbus
     wayland
+    libdrm
+    sqlite
     libxml2.out
     xcbutilwm
     xcbutilkeysyms
